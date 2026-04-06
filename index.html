@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oneli Trans Sabang - Premium Travel Solution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <style>
+        :root {
+            --primary: #77e1f4;
+            --primary-dark: #5fb4d8;
+            --secondary: #2b3f4f;
+            --accent: #25d366;
+            --bg-light: #f8fafc;
+            --text-main: #1e293b;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #e2e8f0; 
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        .wrapper {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--bg-light);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 60px 30px;
+            text-align: center;
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        .hero i { font-size: 60px; margin-bottom: 20px; animation: bounceInDown 1s; }
+        .hero h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 20px;
+            margin-top: -30px;
+        }
+
+        .menu-item {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 24px;
+            text-align: center;
+            border: 1px solid white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .menu-item:hover { transform: scale(1.05) translateY(-5px); background: white; }
+        .menu-item i { font-size: 32px; color: var(--primary); margin-bottom: 12px; }
+        .menu-item span { font-weight: 700; font-size: 14px; display: block; }
+
+        .booking-card {
+            margin: 30px 20px;
+            background: white;
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+        }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 8px; }
+        .input-group select, .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #f1f5f9;
+            border-radius: 15px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .input-group select:focus, .input-group input:focus { border-color: var(--primary); outline: none; }
+
+        .price-est {
+            background: #fff7ed;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px dashed var(--primary);
+        }
+
+        .price-est span { font-weight: 800; color: var(--primary); font-size: 18px; }
+
+        #status-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status-sent { background: #dcfce7; color: #166534; }
+        .status-process { background: #fef9c3; color: #854d0e; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+        /* Payment Modal Style */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .payment-modal {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 25px;
+            border-radius: 30px;
+            text-align: center;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .pay-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 20px;
+            border: 2px solid #f1f5f9;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        .pay-btn:hover {
+            border-color: var(--primary);
+            background: #fff7ed;
+        }
+
+        .pay-btn i.fa-university { color: #004d8c; }
+        .pay-btn i.fa-wallet { color: #008fcf; }
+
+        .close-modal {
+            font-size: 14px;
+            color: #94a3b8;
+            cursor: pointer;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .reviews { padding: 20px; }
+        .review-card {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        .stars { color: #fbbf24; margin-bottom: 10px; }
+        .review-user { font-size: 13px; font-weight: 700; color: var(--secondary); }
+
+        .map-wrapper {
+            margin: 20px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .map-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-footer {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .social-icon.ig { color: #e1306c; }
+        .social-icon.mail { color: #ea4335; }
+        .social-icon:hover { transform: translateY(-5px); }
+
+        .btn-main {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 18px;
+            font-weight: 800;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        <div class="hero">
+            <div class="animate__animated animate__fadeInUp">
+                <i class="fas fa-ship"></i>
+                <h1>Oneli Trans Sabang</h1>
+                <p>Premium Travel & Transport Solution</p>
+            </div>
+        </div>
+
+        <div class="menu-grid">
+            <div class="menu-item">
+                <i class="fas fa-shuttle-van"></i>
+                <span>Antar Jemput</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-ticket"></i>
+                <span>Tiket Kapal</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-motorcycle"></i>
+                <span>Sewa Motor</span>
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-umbrella-beach"></i>
+                <span>Private Tour</span>
+            </div>
+        </div>
+
+        <div class="booking-card">
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-calendar-check" style="color:var(--primary)"></i> Form Pemesanan</h3>
+            
+            <div class="input-group">
+                <label>Layanan Eksklusif</label>
+                <select id="layanan" onchange="calculatePrice()">
+                    <option value="0" disabled selected>Pilih Layanan Kami...</option>
+                    <option value="150000">Antar Jemput Bandara (Rp 150rb)</option>
+                    <option value="100000">Tiket Kapal Cepat (Rp 100rb/org)</option>
+                    <option value="75000">Sewa Motor 24 Jam (Rp 75rb)</option>
+                    <option value="500000">Full Day Tour Sabang (Rp 500rb)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Jumlah Peserta / Unit</label>
+                <input type="number" id="jumlah" value="1" min="1" oninput="calculatePrice()">
+            </div>
+
+            <div class="price-est">
+                <small>Estimasi Biaya:</small>
+                <span id="display-harga">Rp 0</span>
+            </div>
+
+            <button onclick="processOrder()" class="btn-main">
+                <i class="fab fa-whatsapp"></i> LANJUT KE PEMBAYARAN
+            </button>
+
+            <div id="status-box"></div>
+        </div>
+
+        <div id="paymentModal" class="modal-overlay">
+            <div class="payment-modal animate__animated animate__zoomIn">
+                <h3 style="margin-bottom: 10px;">Metode Pembayaran</h3>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Pilih metode pembayaran untuk menyelesaikan pesanan Anda</p>
+                
+                <div class="payment-options">
+                    <div class="pay-btn" onclick="sendToWhatsApp('DANA')">
+                        <span>DANA Digital Wallet</span>
+                        <i class="fas fa-wallet fa-lg"></i>
+                    </div>
+                    
+                    <div class="pay-btn" onclick="sendToWhatsApp('Transfer Bank (BSI/BCA)')">
+                        <span>Transfer Bank Manual</span>
+                        <i class="fas fa-university fa-lg"></i>
+                    </div>
+                </div>
+
+                <span class="close-modal" onclick="closeModal()">Kembali / Batal</span>
+            </div>
+        </div>
+
+        <div class="reviews">
+            <h3 style="margin-left: 10px; margin-bottom: 15px;">Apa Kata Mereka?</h3>
+            <div class="review-card">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p>"Pelayanan sangat on-time! Driver ramah dan mobil bersih."</p>
+                <div class="review-user">— Andi, Jakarta</div>
+            </div>
+        </div>
+
+        <h3 style="padding: 0 25px;">Lokasi Meeting Point</h3>
+        <div class="map-wrapper">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15883.35123456!2d95.2891!3d5.5891!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNcKwMzUnMjAuOCJOIDk1wrAxNycyMC44IkU!5e0!3m2!1sid!2sid!4v1620000000000!5m2!1sid!2sid" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <div class="map-overlay">
+                <i class="fas fa-map-marker-alt" style="color:red; font-size: 20px;"></i>
+                <span>Pelabuhan Ulee Lheue - Cari Tim Oneli Trans di Pintu Masuk</span>
+            </div>
+        </div>
+
+        <div class="social-footer">
+            <a href="https://instagram.com/onelitrans" class="social-icon ig"><i class="fab fa-instagram fa-lg"></i></a>
+            <a href="mailto:info@onelitrans.com" class="social-icon mail"><i class="fas fa-envelope fa-lg"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-facebook-f fa-lg"></i></a>
+        </div>
+
+        <footer style="text-align: center; padding-bottom: 40px; font-size: 11px; color: #94a3b8;">
+            © 2026 ONELI TRANS SABANG <br>
+            Professional Transport Services
+        </footer>
+    </div>
+
+    <script>
+        function calculatePrice() {
+            const harga = document.getElementById('layanan').value;
+            const jumlah = document.getElementById('jumlah').value;
+            const total = harga * jumlah;
+            document.getElementById('display-harga').innerText = "Rp " + total.toLocaleString('id-ID');
+        }
+
+        function processOrder() {
+            const layananSelect = document.getElementById('layanan');
+            if(layananSelect.value == "0") {
+                alert("Silahkan pilih layanan terlebih dahulu!");
+                return;
+            }
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        function sendToWhatsApp(metode) {
+            const statusBox = document.getElementById('status-box');
+            const layananSelect = document.getElementById('layanan');
+            const layananName = layananSelect.options[layananSelect.selectedIndex].text;
+            const estimasi = document.getElementById('display-harga').innerText;
+            const jumlah = document.getElementById('jumlah').value;
+
+            closeModal();
+
+            statusBox.style.display = "block";
+            statusBox.className = "status-process";
+            statusBox.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghubungkan ke Admin...';
+
+            setTimeout(() => {
+                statusBox.className = "status-sent";
+                statusBox.innerHTML = '<i class="fas fa-check-circle"></i> Pesanan Diteruskan ke WA!';
+                
+                const nomorWA = "085355957515"; // Masukkan nomor HP Anda di sini
+                const pesan = `Halo Oneli Trans, saya ingin memesan:\n\n` +
+                              `📍 *Layanan:* ${layananName}\n` +
+                              `👥 *Jumlah:* ${jumlah}\n` +
+                              `💰 *Total:* ${estimasi}\n` +
+                              `💳 *Metode Bayar:* ${metode}\n\n` +
+                              `Mohon segera diproses pesanan saya. Terima kasih!`;
+                
+                window.open(`https://wa.me/${nomorWA}?text=${encodeURIComponent(pesan)}`, '_blank');
+            }, 1200);
+        }
+    </script>
+
+</body>
+</html>
